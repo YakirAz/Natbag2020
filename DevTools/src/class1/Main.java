@@ -16,9 +16,6 @@ public class Main {
 		LocalDateTime d4 = LocalDateTime.of(2019, 6, 1, 17, 0);
 		LocalDateTime d5 = LocalDateTime.of(2019, 6, 3, 5, 0);
 		
-		flights f6 = new flights(s);
-
-		
 		Natbag n = new Natbag();
 
 		n.addFlight("Elal", "OK540",d1 , status.onTime, true, "Petah Tikva");
