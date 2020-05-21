@@ -20,6 +20,10 @@ public class Natbag {
 		flights[numOfFlights++] = flight;
 		return true;
 	}
+	
+	public void addFlight(Scanner s) {
+		addFlight(new flights(s));
+	}
 
 	public void sortFlights() {
 		BubbleSort.bubbleSort(flights, new CompareByDate());
