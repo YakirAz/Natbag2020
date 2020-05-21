@@ -16,22 +16,17 @@ public class Main {
 		LocalDateTime d4 = LocalDateTime.of(2019, 6, 1, 17, 0);
 		LocalDateTime d5 = LocalDateTime.of(2019, 6, 3, 5, 0);
 		
-		flights	f1 = new flights("Elal", "OK540",d1 , status.onTime, true, "Petah Tikva");
-		flights	f2 = new flights("Air Fly", "YA123", d2, status.onTime, true, "Paris");
-		flights	f3  = new flights("Fly Fly", "KOK543", d3, status.onTime, false, "New York");
-		flights	f4 = new flights("Air Kaka", "BO122", d4, status.onTime, true, "Montana");
-		flights	f5 = new flights("Air Kaka", "BO122", d5, status.onTime, false, "Montana");
 		flights f6 = new flights(s);
 
 		
 		Natbag n = new Natbag();
 
-		n.addFlight(f1);
-		n.addFlight(f2);
-		n.addFlight(f3);
-		n.addFlight(f4);
-		n.addFlight(f5);
-		n.addFlight(f6);
+		n.addFlight("Elal", "OK540",d1 , status.onTime, true, "Petah Tikva");
+		n.addFlight("Air Fly", "YA123", d2, status.onTime, true, "Paris");
+		n.addFlight("Fly Fly", "KOK543", d3, status.onTime, false, "New York");
+		n.addFlight("Air Kaka", "BO122", d4, status.onTime, true, "Montana");
+		n.addFlight("Air Kaka", "BO122", d5, status.onTime, false, "Montana");
+		n.addFlight(s);
 		
 		n.sortFlights();
 
