@@ -25,7 +25,7 @@ public class Main {
 		n.addFlight("Air Kaka", "BO122", d5, status.onTime, false, "Montana");
 		n.addFlight(s);
 		
-		n.sortFlights();
+		n.sortFlights(new CompareByDate());
 
 		System.out.println(n.toString());
 
