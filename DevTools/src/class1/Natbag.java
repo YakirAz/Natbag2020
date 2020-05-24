@@ -25,8 +25,8 @@ public class Natbag {
 		addFlight(new flights(s));
 	}
 
-	public void sortFlights() {
-		BubbleSort.bubbleSort(flights, new CompareByDate());
+	public void sortFlights(Comparator<?> c) {
+		BubbleSort.bubbleSort(flights, c);
 	}
 
 	public flights[] getFlights() {
