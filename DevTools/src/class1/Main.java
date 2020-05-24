@@ -28,6 +28,12 @@ public class Main {
 		n.sortFlights(new CompareByDate());
 
 		System.out.println(n.toString());
+		
+		System.out.println("----------------------------------------------------------------------");
+		
+		n.sortFlights(new CompareByAirPortName());
+
+		System.out.println(n.toString());
 
 	}
 
