@@ -1,195 +1,85 @@
 package class1;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class flights {
+public class Seat {
+	private Person myPerson;
+	private String seatID;
+	private flights myPlane;
+	private	boolean freeSeat = true;
+	
+	public Seat(String seatID, flights myPlane, Person myPerson) {
+		this.seatID = seatID;
+		this.myPlane = myPlane;
+		setMyPerson(myPerson);
+	}
 
-	public enum status {landing, unconclusive, early, late, onTime};
-	public static int IDFlight;
-	protected String airline;
-	protected String flightNum;
-	protected status eStatus;
-	protected boolean arriving;
-	protected String city;
-	protected LocalDateTime dateTime;
-	public int myIDFlight;
-	protected ArrayList<Seat> allSeats = new ArrayList<Seat>(); 
-
-
-	public flights(String airline, String flightNum, LocalDateTime dateTime, status eStatus, boolean arriving, String city) {
-		this.airline = airline;
-		this.flightNum = flightNum;
-		this.eStatus = eStatus;
-		this.arriving = arriving;
-		this.city = city;
-		this.dateTime = dateTime;
-		myIDFlight = ++IDFlight;
-		setSeats();
+	public Seat(Seat seat) {
+		this.seatID = seat.seatID;
+		this.myPlane = seat.myPlane;
+		setMyPerson(seat.myPerson);
 	}
 	
-	public flights(flights f) {
-		this.airline = f.airline;
-		this.flightNum = f.flightNum;
-		this.eStatus = f.eStatus;
-		this.arriving = f.arriving;
-		this.city = f.city;
-		this.dateTime = f.dateTime;
-		myIDFlight = ++IDFlight;
-		setSeats();
-	}
-
-	public flights(Scanner s)  throws FileNotFoundException{
+	public Seat(Scanner s ,flights f) throws FileNotFoundException {
+		seatID = s.nextLine();
+		String res = s.nextLine();
+		myPerson = new Person(null);
+		if (res.equalsIgnoreCase("null")) {
+			myPerson.setCreditCard(null);
+		}else {
+			myPerson.setCreditCard(Long.parseLong(res));
+			freeSeat = false;
+		}
+		myPerson.setPassPortID(s.nextLine());
+		myPlane = new flights(f);
 		
-		airline = s.next();
-		flightNum = s.next();
-		eStatus = status.valueOf(s.next());
-		arriving = s.nextBoolean();
-		s.nextLine(); // Clean Buffer
-		city = s.nextLine();
-		String dateTime = s.nextLine();
-		String dateTimeArr[] = dateTime.split("-");
-		int year = Integer.parseInt(dateTimeArr[0]);
-		int month = Integer.parseInt(dateTimeArr[1]);
-		String tempArr[] = dateTimeArr[2].split("T");
-		int day = Integer.parseInt(tempArr[0]);
-		String timeArr[] = tempArr[1].split(":");
-		int hour = Integer.parseInt(timeArr[0]);
-		int minutes = Integer.parseInt(timeArr[1]);
-		this.dateTime = LocalDateTime.of(year, month, day, hour, minutes);
-		myIDFlight = ++IDFlight;
-		
-		Scanner s2 = new Scanner(new File("SeatsList"+flightNum+".txt"));
-		this.allSeats = new ArrayList<Seat>();
-		while (s2.hasNext()) {
-			allSeats.add(new Seat(s2, this));
-		}
-		s2.close();
 	}
 	
-	public void setSeatToPerson(Seat s, Person p) throws FileNotFoundException{
-		for (int i = 0; i < allSeats.size(); i++) {
-				if (s.getSeatID().equals(allSeats.get(i).getSeatID())) {
-					allSeats.get(i).setMyPerson(p);
-					allSeats.get(i).getMyPerson().setMySeat(allSeats.get(i));
-				}
+	public Person getMyPerson() {
+		return myPerson;
+	}
+
+	public void setMyPerson(Person myPerson) {
+		this.myPerson = new Person(myPerson);
+		if(myPerson == null) { 
+			freeSeat = true;
+		}else {
+			freeSeat = false;
+			this.myPerson.setMySeat(this);
 		}
 	}
 	
-	public void save(PrintWriter pw) throws FileNotFoundException{
-		pw.println(airline);
-		pw.println(flightNum);
-		pw.println(eStatus);
-		pw.println(arriving);
-		pw.println(city);
-		pw.println(dateTime);
-		
-		PrintWriter pw2 = new PrintWriter(new File("SeatsList"+flightNum+".txt"));
-		for (int i = 0; i < allSeats.size(); i++) {
-				allSeats.get(i).save(pw2);
-		}
-		pw2.close();
+	public boolean getfreeSeat() {
+		return freeSeat;
 	}
 
-	public String getAirline() {
-		return airline;
+	public String getSeatID() {
+		return seatID;
 	}
 
-	public void setAirline(String airline) {
-		this.airline = airline;
+	public void setSeatID(String seatID) {
+		this.seatID = seatID;
 	}
 
-	public String getFlightNum() {
-		return flightNum;
+	public flights getMyPlane() {
+		return myPlane;
 	}
 
-	public void setFlightNum(String flightNum) {
-		this.flightNum = flightNum;
-	}
-
-	public status geteStatus() {
-		return eStatus;
-	}
-
-	public void seteStatus(status eStatus) {
-		this.eStatus = eStatus;
-	}
-	
-	public Seat getSeatBySeadID(String SeatID) {
-		for (int i = 0; i < allSeats.size(); i++) {
-				if (SeatID.equals(allSeats.get(i).getSeatID())) {
-					return allSeats.get(i);
-				}
-		}
-		return null;
-	}
-	
-	private void setSeats() {
-		int numOfSeats = 0;
-		for (int i = 0; i < 5 || numOfSeats == allSeats.size(); i++) {
-			for (int j = 1; j < 8; j++) {
-				String seatID = "Line: "+i+" Row: "+j;
-				this.allSeats.add(new Seat(seatID, this, null));
-			}
-		}
-	}
-	
-	public void getAllFreeSeats() {
-		for (int i = 0; i < allSeats.size(); i++) {
-				if (allSeats.get(i).getfreeSeat()) { // true -> free seat
-					System.out.println(allSeats.get(i).getSeatID());
-				}
-		}
-	}
-
-	public String toString() {
-		String s = "";
-		if (arriving) {
-			s += airline + " flight: " + flightNum + " from " + city + " arriving at: " +  dateTime + "\n";
-		}
-		else {
-			s += airline + " flight: " + flightNum + " to " + city + " departing at: " +  dateTime + "\n";
-		}
-		return s;
+	public void setMyPlane(flights myPlane) {
+		this.myPlane = myPlane;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		flights other = (flights) obj;
-		if (airline == null) {
-			if (other.airline != null)
-				return false;
-		} else if (!airline.equals(other.airline))
-			return false;
-		if (arriving != other.arriving)
-			return false;
-		if (city == null) {
-			if (other.city != null)
-				return false;
-		} else if (!city.equals(other.city))
-			return false;
-		if (dateTime == null) {
-			if (other.dateTime != null)
-				return false;
-		} else if (!dateTime.equals(other.dateTime))
-			return false;
-		if (eStatus != other.eStatus)
-			return false;
-		if (flightNum == null) {
-			if (other.flightNum != null)
-				return false;
-		} else if (!flightNum.equals(other.flightNum))
-			return false;
-		return true;
+	public String toString() {
+		return "SeatID = " + seatID +(myPerson == null ? "" :", " + myPerson )+ ", myflightNum = " + myPlane.flightNum + "\n";
+	}
+
+	public void save(PrintWriter pw) throws FileNotFoundException {
+		pw.println(this.seatID);
+		pw.println(myPerson.getCreditCard());
+		pw.println(myPerson.getPassPortID());
+		
 	}
 }
