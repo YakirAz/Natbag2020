@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class flights {
@@ -17,7 +18,7 @@ public class flights {
 	protected String city;
 	protected LocalDateTime dateTime;
 	public int myIDFlight;
-	protected Seat[] allSeats = new Seat[50]; 
+	protected ArrayList<Seat> allSeats = new ArrayList<Seat>(); 
 
 
 	public flights(String airline, String flightNum, LocalDateTime dateTime, status eStatus, boolean arriving, String city) {
@@ -63,24 +64,19 @@ public class flights {
 		myIDFlight = ++IDFlight;
 		
 		Scanner s2 = new Scanner(new File("SeatsList"+flightNum+".txt"));
-		int sizeOfArr = s2.nextInt();
-		int num = 0;
-		this.allSeats = new Seat[sizeOfArr];
-		s2.nextLine();
+		this.allSeats = new ArrayList<Seat>();
 		while (s2.hasNext()) {
-			this.allSeats[num++] = new Seat(s2, this);
+			allSeats.add(new Seat(s2, this));
 		}
 		s2.close();
 	}
 	
 	public void setSeatToPerson(Seat s, Person p) throws FileNotFoundException{
-		for (int i = 0; i < allSeats.length; i++) {
-			if (allSeats[i] != null) {
-				if (s.getSeatID().equals(allSeats[i].getSeatID())) {
-					allSeats[i].setMyPerson(p);
-					allSeats[i].getMyPerson().setMySeat(allSeats[i]);
+		for (int i = 0; i < allSeats.size(); i++) {
+				if (s.getSeatID().equals(allSeats.get(i).getSeatID())) {
+					allSeats.get(i).setMyPerson(p);
+					allSeats.get(i).getMyPerson().setMySeat(allSeats.get(i));
 				}
-			}
 		}
 	}
 	
@@ -93,11 +89,8 @@ public class flights {
 		pw.println(dateTime);
 		
 		PrintWriter pw2 = new PrintWriter(new File("SeatsList"+flightNum+".txt"));
-		pw2.println(allSeats.length);
-		for (int i = 0; i < allSeats.length; i++) {
-			if (allSeats[i] != null) {
-				allSeats[i].save(pw2);
-			}
+		for (int i = 0; i < allSeats.size(); i++) {
+				allSeats.get(i).save(pw2);
 		}
 		pw2.close();
 	}
@@ -127,33 +120,29 @@ public class flights {
 	}
 	
 	public Seat getSeatBySeadID(String SeatID) {
-		for (int i = 0; i < allSeats.length; i++) {
-			if (allSeats[i] != null) {
-				if (SeatID.equals(allSeats[i].getSeatID())) {
-					return allSeats[i];
+		for (int i = 0; i < allSeats.size(); i++) {
+				if (SeatID.equals(allSeats.get(i).getSeatID())) {
+					return allSeats.get(i);
 				}
-			}
 		}
 		return null;
 	}
 	
 	private void setSeats() {
 		int numOfSeats = 0;
-		for (int i = 0; i < 5 || numOfSeats == allSeats.length; i++) {
+		for (int i = 0; i < 5 || numOfSeats == allSeats.size(); i++) {
 			for (int j = 1; j < 8; j++) {
 				String seatID = "Line: "+i+" Row: "+j;
-				this.allSeats[numOfSeats++] = new Seat(seatID, this, null);
+				this.allSeats.add(new Seat(seatID, this, null));
 			}
 		}
 	}
 	
 	public void getAllFreeSeats() {
-		for (int i = 0; i < allSeats.length; i++) {
-			if (allSeats[i] != null) {
-				if (allSeats[i].getfreeSeat()) { // true -> free seat
-					System.out.println(allSeats[i].getSeatID());
+		for (int i = 0; i < allSeats.size(); i++) {
+				if (allSeats.get(i).getfreeSeat()) { // true -> free seat
+					System.out.println(allSeats.get(i).getSeatID());
 				}
-			}
 		}
 	}
 
