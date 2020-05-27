@@ -23,7 +23,8 @@ public class Main {
 			while (res != -1) {
 				System.out.println(
 						"To add flight --> 1\n" + "To sort by date --> 2\n" + "To sort by air ports name --> 3\n"
-								+ "To buy ticket --> 4\n" + "For list of all free seats --> 5\n" + "Exit --> -1\n");
+								+ "To buy ticket --> 4\n" + "For list of all free seats --> 5\n"
+								+ "To search specific flight --> 6\n" +"Exit --> -1\n");
 				res = s.nextInt();
 				switch (res) {
 				case 1: // add flight
@@ -67,6 +68,53 @@ public class Main {
 						}
 					}
 					break;
+				case 6: // Search flight
+					s.nextLine(); // Clean buffer
+					System.out.println("For departure -> D, arrival -> A");
+					String res1 = s.nextLine();
+					int ans = 0;
+					if (res1.equalsIgnoreCase("D")) {
+						System.out.println("To search with flight number -> 1\nTo search with City -> 2");
+						ans = s.nextInt();
+						s.nextLine(); // Clean buffer
+						switch (ans) {
+						case 1:
+							System.out.println("Please enter the flight number:\n");
+							res1 = s.nextLine();
+							System.out.println(n.searchDepartureFlightByFlightNumber(res1));
+							break;
+
+						case 2:
+							System.out.println("Please enter the city:\n");
+							res1 = s.nextLine();
+							System.out.println(n.searchDepartureFlightByCity(res1));
+							break;
+
+						default:
+							throw new IllegalArgumentException("Unexpected value: " + ans);
+						}
+					} else { // Arrival flights
+						System.out.println("To search with flight number -> 1\nTo search with City -> 2");
+						ans = s.nextInt();
+						s.nextLine(); // Clean buffer
+						switch (ans) {
+						case 1:
+							System.out.println("Please enter the flight number:\n");
+							res1 = s.nextLine();
+							System.out.println(n.searchArrivalFlightByFlightNumber(res1));
+							break;
+
+						case 2:
+							System.out.println("Please enter the city:\n");
+							res1 = s.nextLine();
+							System.out.println(n.searchArrivalFlightByCity(res1));
+							break;
+
+						default:
+							throw new IllegalArgumentException("Unexpected value: " + ans);
+						}
+					}
+					break;
 
 				case -1: // Exit
 					System.out.println("Bay-bay");
@@ -107,7 +155,8 @@ public class Main {
 				tempPerson.setMySeat(tempSeat); // initial seat for user
 				tempSeat.setMyPerson(tempPerson); // initial user into seat
 				n.searchFlightByFlightNumber(flightNum).setSeatToPerson(tempSeat, tempPerson);
-				System.out.println("\nYour ticket has been sent to your Email.\n\n" + tempPerson.getMySeat() + "\n" + tempSeat.getMyPerson() + "\n");
+				System.out.println("\nYour ticket has been sent to your Email.\n\n" + tempPerson.getMySeat() + "\n"
+						+ tempSeat.getMyPerson() + "\n");
 				n.save("Natbag2020.txt");
 			}
 		}
