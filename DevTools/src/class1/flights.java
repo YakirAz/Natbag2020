@@ -9,19 +9,24 @@ import java.util.Scanner;
 
 public class flights {
 
-	public enum status {landing, unconclusive, early, late, onTime};
+	public enum status {
+		landing, unconclusive, early, late, onTime
+	};
+
 	public static int IDFlight;
 	protected String airline;
 	protected String flightNum;
 	protected status eStatus;
 	protected boolean arriving;
+	
+
 	protected String city;
 	protected LocalDateTime dateTime;
 	public int myIDFlight;
-	protected ArrayList<Seat> allSeats = new ArrayList<Seat>(); 
+	protected ArrayList<Seat> allSeats = new ArrayList<Seat>();
 
-
-	public flights(String airline, String flightNum, LocalDateTime dateTime, status eStatus, boolean arriving, String city) {
+	public flights(String airline, String flightNum, LocalDateTime dateTime, status eStatus, boolean arriving,
+			String city) {
 		this.airline = airline;
 		this.flightNum = flightNum;
 		this.eStatus = eStatus;
@@ -31,7 +36,7 @@ public class flights {
 		myIDFlight = ++IDFlight;
 		setSeats();
 	}
-	
+
 	public flights(flights f) {
 		this.airline = f.airline;
 		this.flightNum = f.flightNum;
@@ -43,8 +48,8 @@ public class flights {
 		setSeats();
 	}
 
-	public flights(Scanner s)  throws FileNotFoundException{
-		
+	public flights(Scanner s) throws FileNotFoundException {
+
 		airline = s.next();
 		flightNum = s.next();
 		eStatus = status.valueOf(s.next());
@@ -62,37 +67,41 @@ public class flights {
 		int minutes = Integer.parseInt(timeArr[1]);
 		this.dateTime = LocalDateTime.of(year, month, day, hour, minutes);
 		myIDFlight = ++IDFlight;
-		
-		Scanner s2 = new Scanner(new File("SeatsList"+flightNum+".txt"));
+
+		Scanner s2 = new Scanner(new File("SeatsList" + flightNum + ".txt"));
 		this.allSeats = new ArrayList<Seat>();
 		while (s2.hasNext()) {
 			allSeats.add(new Seat(s2, this));
 		}
 		s2.close();
 	}
-	
-	public void setSeatToPerson(Seat s, Person p) throws FileNotFoundException{
+
+	public void setSeatToPerson(Seat s, Person p) throws FileNotFoundException {
 		for (int i = 0; i < allSeats.size(); i++) {
-				if (s.getSeatID().equals(allSeats.get(i).getSeatID())) {
-					allSeats.get(i).setMyPerson(p);
-					allSeats.get(i).getMyPerson().setMySeat(allSeats.get(i));
-				}
+			if (s.getSeatID().equals(allSeats.get(i).getSeatID())) {
+				allSeats.get(i).setMyPerson(p);
+				allSeats.get(i).getMyPerson().setMySeat(allSeats.get(i));
+			}
 		}
 	}
-	
-	public void save(PrintWriter pw) throws FileNotFoundException{
+
+	public void save(PrintWriter pw) throws FileNotFoundException {
 		pw.println(airline);
 		pw.println(flightNum);
 		pw.println(eStatus);
 		pw.println(arriving);
 		pw.println(city);
 		pw.println(dateTime);
-		
-		PrintWriter pw2 = new PrintWriter(new File("SeatsList"+flightNum+".txt"));
+
+		PrintWriter pw2 = new PrintWriter(new File("SeatsList" + flightNum + ".txt"));
 		for (int i = 0; i < allSeats.size(); i++) {
-				allSeats.get(i).save(pw2);
+			allSeats.get(i).save(pw2);
 		}
 		pw2.close();
+	}
+	
+	public String getCity() {
+		return city;
 	}
 
 	public String getAirline() {
@@ -118,41 +127,40 @@ public class flights {
 	public void seteStatus(status eStatus) {
 		this.eStatus = eStatus;
 	}
-	
+
 	public Seat getSeatBySeadID(String SeatID) {
 		for (int i = 0; i < allSeats.size(); i++) {
-				if (SeatID.equals(allSeats.get(i).getSeatID())) {
-					return allSeats.get(i);
-				}
+			if (SeatID.equals(allSeats.get(i).getSeatID())) {
+				return allSeats.get(i);
+			}
 		}
 		return null;
 	}
-	
+
 	private void setSeats() {
 		int numOfSeats = 0;
 		for (int i = 0; i < 5 || numOfSeats == allSeats.size(); i++) {
 			for (int j = 1; j < 8; j++) {
-				String seatID = "Line: "+i+" Row: "+j;
+				String seatID = "Line: " + i + " Row: " + j;
 				this.allSeats.add(new Seat(seatID, this, null));
 			}
 		}
 	}
-	
+
 	public void getAllFreeSeats() {
 		for (int i = 0; i < allSeats.size(); i++) {
-				if (allSeats.get(i).getfreeSeat()) { // true -> free seat
-					System.out.println(allSeats.get(i).getSeatID());
-				}
+			if (allSeats.get(i).getfreeSeat()) { // true -> free seat
+				System.out.println(allSeats.get(i).getSeatID());
+			}
 		}
 	}
 
 	public String toString() {
 		String s = "";
 		if (arriving) {
-			s += airline + " flight: " + flightNum + " from " + city + " arriving at: " +  dateTime + "\n";
-		}
-		else {
-			s += airline + " flight: " + flightNum + " to " + city + " departing at: " +  dateTime + "\n";
+			s += airline + " flight: " + flightNum + " from " + city + " arriving at: " + dateTime + "\n";
+		} else {
+			s += airline + " flight: " + flightNum + " to " + city + " departing at: " + dateTime + "\n";
 		}
 		return s;
 	}
