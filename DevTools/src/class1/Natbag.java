@@ -17,17 +17,17 @@ public class Natbag {
 
 	public Natbag(String fileName) throws FileNotFoundException {
 		Scanner s = new Scanner(new File(fileName));
-			this.allFlights = new ArrayList<flights>();
-			while (s.hasNext()) {
-				allFlights.add(new flights(s));
-			}
+		this.allFlights = new ArrayList<flights>();
+		while (s.hasNext()) {
+			allFlights.add(new flights(s));
+		}
 		s.close();
 	}
 
 	public void save(String fileName) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(fileName));
 		for (int i = 0; i < allFlights.size(); i++) {
-				allFlights.get(i).save(pw);
+			allFlights.get(i).save(pw);
 		}
 		pw.close();
 	}
@@ -49,12 +49,52 @@ public class Natbag {
 	public ArrayList<flights> getFlights() {
 		return allFlights;
 	}
+	
+	public ArrayList<flights> searchArrivalFlightByCity(String city) throws Exception {
+		ArrayList<flights> tempArr = new ArrayList<flights>();
+		for (int i = 0; i < allFlights.size(); i++) {
+			if (allFlights.get(i).getCity().equalsIgnoreCase(city) && allFlights.get(i).arriving) {
+				tempArr.add(allFlights.get(i));
+			}
+		}
+		return tempArr;
+	}
+	
+	public ArrayList<flights> searchDepartureFlightByCity(String city) throws Exception {
+		ArrayList<flights> tempArr = new ArrayList<flights>();
+		for (int i = 0; i < allFlights.size(); i++) {
+			if (allFlights.get(i).getCity().equalsIgnoreCase(city) && !allFlights.get(i).arriving) {
+				tempArr.add(allFlights.get(i));
+			}
+		}
+		return tempArr;
+	}
+	
+	public flights searchArrivalFlightByFlightNumber(String flightNum) throws Exception {
+		for (int i = 0; i < allFlights.size(); i++) {
+			if (allFlights.get(i).getFlightNum().equalsIgnoreCase(flightNum) && allFlights.get(i).arriving) {
+				return allFlights.get(i);
+			}
+		}
+		System.out.println("Can't find flight: "+ flightNum);
+		return null;
+	}
+	
+	public flights searchDepartureFlightByFlightNumber(String flightNum) throws Exception {
+		for (int i = 0; i < allFlights.size(); i++) {
+			if (allFlights.get(i).getFlightNum().equalsIgnoreCase(flightNum) && !allFlights.get(i).arriving) {
+				return allFlights.get(i);
+			}
+		}
+		System.out.println("Can't find flight: "+ flightNum);
+		return null;
+	}
 
 	public flights searchFlightByFlightNumber(String flightNum) throws Exception {
 		for (int i = 0; i < allFlights.size(); i++) {
-				if (allFlights.get(i).getFlightNum().equalsIgnoreCase(flightNum)) {
-					return allFlights.get(i);
-				}
+			if (allFlights.get(i).getFlightNum().equalsIgnoreCase(flightNum)) {
+				return allFlights.get(i);
+			}
 		}
 		return null;
 	}
