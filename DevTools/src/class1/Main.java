@@ -138,26 +138,33 @@ public class Main {
 			System.out.println("Please enter the flight number:");
 			String flightNum = s.next();
 			flights tempFlight = n.searchFlightByFlightNumber(flightNum);
-			System.out.println("Is that the flight you mean to:\n" + tempFlight + "\nY to continue.\n");
-			String res2 = s.next();
-			if (res2.equalsIgnoreCase("Y")) { // if NOT wrong flight!
-				System.out.println("Please enter yor credit catd:\n"); // FOR now without exceptions
-				Long creditCard = s.nextLong();
-				System.out.println("\nPlease enter youer passport number:\n");
-				String passportNumber = s.next();
-				Person tempPerson = new Person(creditCard, passportNumber, null); // create temp person
-				s.nextLine(); // Clean Buffer
-				System.out.println("Please pick one seat:\n");
-				n.searchFlightByFlightNumber(flightNum).getAllFreeSeats(); // pick a seat
-				System.out.println("\nPlease enter 'Line: <numLine> Row: <numRow>'");
-				String tempSeatID = s.nextLine();
-				Seat tempSeat = tempFlight.getSeatBySeadID(tempSeatID);
-				tempPerson.setMySeat(tempSeat); // initial seat for user
-				tempSeat.setMyPerson(tempPerson); // initial user into seat
-				n.searchFlightByFlightNumber(flightNum).setSeatToPerson(tempSeat, tempPerson);
-				System.out.println("\nYour ticket has been sent to your Email.\n\n" + tempPerson.getMySeat() + "\n"
-						+ tempSeat.getMyPerson() + "\n");
-				n.save("Natbag2020.txt");
+			if (tempFlight != null) {
+				System.out.println("Is that the flight you mean to:\n"
+						+ tempFlight
+						+"\nY to continue.\n");
+				String res2 =s.next();
+				if (res2.equalsIgnoreCase("Y")) { //if NOT wrong flight!
+					System.out.println("Please enter yor credit catd:\n"); // FOR now without exceptions
+					Long creditCard = s.nextLong();
+					System.out.println("\nPlease enter youer passport number:\n");
+					String passportNumber = s.next();
+					Person tempPerson = new Person(creditCard, passportNumber, null); //create temp person
+					System.out.println(tempPerson);
+					s.nextLine(); // Clean Buffer
+					System.out.println("Please pick one seat:\n");
+					n.searchFlightByFlightNumber(flightNum).getAllFreeSeats(); // pick a seat
+					System.out.println("\nPlease enter 'Line: <numLine> Row: <numRow>'");
+					String tempSeatID = s.nextLine();
+					Seat tempSeat = tempFlight.getSeatBySeadID(tempSeatID);
+					tempPerson.setMySeat(tempSeat); // initial seat for user
+					tempSeat.setMyPerson(tempPerson); // initial user into seat
+					n.searchFlightByFlightNumber(flightNum).setSeatToPerson(tempSeat, tempPerson);
+					System.out.println("\nYour ticket has been sent to your Email.\n\n"+tempPerson.getMySeat() + "\n" + tempSeat.getMyPerson() + "\n");
+					n.save("Natbag2020.txt");
+				}
+			}else {
+				System.out.println("No such flight, returning to main menu \n");
+				return;
 			}
 		}
 	}
