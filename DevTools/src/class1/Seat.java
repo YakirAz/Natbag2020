@@ -5,8 +5,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Seat {
-	private Person myPerson;
 	private String seatID;
+	private Person myPerson;
 	private flights myPlane;
 	private	boolean freeSeat = true;
 	
