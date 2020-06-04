@@ -5,7 +5,6 @@ import java.util.Scanner;
 import natbad2020.flights.status;
 
 public class Main {
-
 	static Scanner s = new Scanner(System.in);
 	static Natbag n = new Natbag();
 
